@@ -4,19 +4,13 @@ const { MongoClient } = require('mongodb');
 const uri = 'mongodb://localhost:27017';
 const client = new MongoClient(uri);
 
-async function run() {
-  try {
-    const database = client.db('flights');
-    const movies = database.collection('flightData');
+async function mongoInsertOne(doc) {
+  const database = client.db('wordMeaning');
+  const dictionary = database.collection('dictionary');
 
-    //Query
-    const query = {};
-    const movie = await movies.findOne(query);
-
-    console.log(movie);
-  } finally {
-    await client.close();
-  }
+  const result = await dictionary.insertOne(doc);
+  console.log('Pushing results....');
+  return result;
 }
 
-run().catch(console.dir);
+module.exports = mongoInsertOne;
