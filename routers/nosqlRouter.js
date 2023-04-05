@@ -1,6 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const redisClient = require('../clients/redisClient');
+const mongoInsertOne = require('../clients/mongoClient');
 
 const router = express.Router();
 
@@ -37,8 +38,11 @@ router.get('/', (req, res, next) => {
       console.log('Redis value NOT found :' + value);
       getWordResponse(word).then((data) =>
         setRedisValue(word, JSON.stringify(data)).then((redisResponse) => {
-          console.log('redisResponse :' + redisResponse);
-          res.status(201).json({ message: data });
+          console.log('redisRevertResponse :' + redisResponse);
+          mongoInsertOne({ word: word, meaning: data }).then((mongoResult) => {
+            console.log(mongoResult);
+            res.status(201).json({ message: data });
+          });
         })
       );
     }
