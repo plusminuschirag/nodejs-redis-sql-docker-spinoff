@@ -3,6 +3,7 @@ const axios = require('axios');
 const redisClient = require('./clients/redisClient');
 const { insertDB, showDB } = require('./clients/sqlClient');
 const prepareDBQuery = require('./utils/dbUtils');
+const nosqlRouter = require('./routers/nosqlRouter');
 
 const app = express();
 
@@ -109,5 +110,7 @@ app.get('/show', (req, res, next) => {
     response: 'save',
   });
 });
+
+app.use('/nosql', nosqlRouter);
 
 module.exports = app;
